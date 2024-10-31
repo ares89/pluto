@@ -1,6 +1,9 @@
 import logging
 from typing import Optional
 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 import hydra
 import numpy
 import pytorch_lightning as pl
@@ -14,7 +17,7 @@ from nuplan.planning.script.utils import set_default_path
 from nuplan.planning.training.experiments.caching import cache_data
 from omegaconf import DictConfig
 
-from src.custom_training import (
+from src.custom_training.custom_training_builder import (
     TrainingEngine,
     build_training_engine,
     update_config_for_training,
@@ -106,4 +109,9 @@ def main(cfg: DictConfig) -> Optional[TrainingEngine]:
 
 
 if __name__ == "__main__":
+
+    # import sys
+    # sys.argv.extend("""
+    # py_func=train +training=train_pluto_vectornet   worker=single_machine_thread_pool worker.max_workers=4   scenario_builder=nuplan cache.cache_path=/raid/prediction/lsg/nuplan_proj/pluto/data/sanity_check cache.use_cache_without_dataset=true   data_loader.params.batch_size=4 data_loader.params.num_workers=1
+    # """.split())
     main()
